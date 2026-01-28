@@ -1,4 +1,4 @@
-# EM Clustering on Wikipedia Dataset (Data 606 Final Assignment)
+# EM Clustering on Wikipedia Dataset
 
 This project implements the Expectation-Maximization (EM) algorithm from scratch for clustering Wikipedia articles represented as high-dimensional TF-IDF vectors. The clustering is modeled using a Gaussian Mixture Model (GMM) with **diagonal covariance matrices** for efficiency and stability.
 
