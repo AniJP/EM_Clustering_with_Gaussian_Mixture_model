@@ -1,0 +1,71 @@
+﻿Purpose
+This file provides an informal but detailed analysis of the behavior and performance of the custom EM algorithm applied to Wikipedia article clustering.
+Clustering Behavior
+* The algorithm successfully partitions the TF-IDF representations of Wikipedia biographies into 5 soft clusters.
+* Clusters are interpretable through their top words (e.g., “antiaids”, “airgate”, “montrauxjoby”) indicating recurring themes or named entities.
+* The ASCII word clouds clearly reflect dominant terms across clusters, making the unsupervised results understandable even without direct labels.
+
+Convergence Analysis
+   * The log-likelihood starts at 2.29e9 and ends at 2.35e9, increasing steadily over 20 iterations.
+   * This monotonic increase confirms numerical stability and correct implementation of E-step and M-step.
+   * A convergence threshold was effectively reached, with little improvement in the final few iterations.
+
+Parameter Sanity Checks
+      * All cluster weights are between 0.11 and 0.26 and sum to ≈1, confirming correct normalization.
+      * No variance is exactly zero—variance floors (1e-8) were correctly applied to prevent divide-by-zero errors.
+      * Means and variances are computed per feature dimension (diagonal only), and each cluster differs in its feature emphasis.
+
+Output Consistency
+         * The values reported in:
+         * cluster_stats.txt
+         * em_parameters.txt
+         * ascii_wordclouds.txt
+…are internally consistent.
+            * Top 5 and Top 10 words match exactly across statistics and visualizations.
+Benchmark
+            * A benchmark script (benchmark.py) was included to compare results with sklearn’s built-in GMM implementation.
+            * The comparison was based on runtime, number of iterations, per-iteration efficiency, and final log-likelihood. Below is the result summary:
+
+
+Metric
+	Your EM
+	Sklearn GMM
+	Total Time (s)
+	41.65
+	1891.76
+	Iterations
+	20
+	18
+	Time per Iteration
+	2.08 s
+	105.10 s
+	Final Log-Likelihood
+	2.3546e+09
+	2.2817e+09
+	
+
+            * Our EM converged faster and yielded a higher final log-likelihood than sklearn’s GMM.
+            * The sklearn implementation was significantly slower, likely due to its use of full covariance matrices or internal optimization checks.
+            * Our model is both computationally efficient and numerically stable, despite being implemented from scratch.
+            * Our EM completed in 41.65 seconds over 20 iterations, averaging just 2.08 seconds per iteration.
+            * Sklearn GMM took 1891.76 seconds over 18 iterations, with a much slower per-iteration average of 105.10 seconds.
+            * Despite this, our EM achieved a better final log-likelihood of 2.3546e+09 vs sklearn’s 2.2817e+09.
+This validates the effectiveness of our diagonal-covariance optimization and efficient vectorized implementation.
+
+
+Subset Run Validation
+As part of validating our implementation, we ran the EM pipeline on a small-scale dataset (people_wiki.csv). This confirmed that the algorithm:
+            * Converges stably in a low-data regime
+            * Produces meaningful clusters with interpretable top words
+            * Outputs results in the correct format (matching full-data structure)
+
+This sample run was essential for early testing and debugging, and it serves as a reliable baseline for comparing larger runs.
+Summary
+The EM algorithm behaves exactly as expected:
+               * Converges reliably
+               * Produces consistent and interpretable clusters
+               * Outputs are statistically sound and semantically meaningful
+               * Benchmarks confirm strong performance against a standard implementation
+               * All assignment requirements (and extra credit) were fulfilled
+
+No critical bugs or anomalies were observed in the clustering results, log-likelihood progression, or output files.

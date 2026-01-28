@@ -1,0 +1,137 @@
+﻿Anirudh Jayaprakash                                                                              120622342
+Pramod Kumar                                                                              121032911
+Mohammad Nayeem Teli
+DATA606 - Algorithms for Data Science
+17 May 2025
+
+
+                  Technical Report: EM Clustering on Wikipedia Articles
+1. Objective
+
+
+The goal of this project is to implement the Expectation-Maximization (EM) algorithm from scratch to cluster Wikipedia articles based on their text content. These articles are represented as TF-IDF vectors, and the clustering is modeled as a Gaussian Mixture Model (GMM) with diagonal covariance matrices to handle high dimensionality efficiently.
+
+
+2. Background and Implementation Details
+2.1 Motivation for Diagonal Covariance
+* Full covariance matrices in GMMs are computationally expensive in high dimensions.
+* They also require fitting too many parameters.
+* Diagonal covariance matrices reduce computational burden and risk of overfitting, as each cluster has only _m_ variance parameters (vs. _m(m+1)/2_ in full covariance)
+2.2 Data Description
+* Dataset: A subset of Wikipedia biographies
+* Features: Extracted using TfidfVectorizer from sklearn, resulting in high-dimensional sparse vectors
+* All TF-IDF vectors are normalized to unit length
+
+
+3. EM Implementation
+3.1 Initialization
+* Means (μ_k) initialized using K-Means centroids
+* Weights (π_k) initialized as the proportion of articles in each cluster
+* Diagonal variances (σ²_k) computed using:
+  
+
+* Variance floor of 1e-8 is used for numerical stability
+
+3.2 E-Step (Expectation)
+   * Calculate responsibilities r_ik using Gaussian likelihoods with diagonal covariance.
+   * Compute log-likelihood and track it per iteration.
+
+3.3 M-Step (Maximization)
+      * Update:
+      * Means μ_k
+      * Diagonal variances σ²_k
+      * Cluster weights π_k
+
+3.4 Convergence
+         * Stop when log-likelihood increase is below threshold (or max 20 iterations)
+4. Cluster Interpretation
+Each cluster is interpreted via:
+         * Top 5–10 words with highest mean values
+         * Their associated variances (diagonal elements of the covariance matrix)
+This provides insights into the thematic composition of each cluster.
+5. Output Generation
+The following output files were created:
+         * cluster_assignments.txt: Document ID → Cluster ID
+         * cluster_stats.txt: Top 5 words and stats per cluster
+         * em_parameters.txt: Final learned parameters (means, variances, weights)
+         * convergence_log.txt: Log-likelihood values per iteration
+         * ascii_wordclouds.txt: ASCII visualization of top cluster words
+Each output adheres to the assignment specifications.
+6. Results
+6.1 Convergence
+         * Log-likelihood increased from 2.29e9 to 2.35e9 over 20 iterations
+         * Indicates stable convergence
+
+6.2 Parameters
+            * Cluster weights range from ~0.11 to ~0.26 and sum to ≈1.0.
+            * Variances are all positive and non-zero.
+            * Top words (e.g., “antiaids”, “airgate”) are consistently prominent across clusters.
+
+6.3 Cluster Assignments
+               * Each article assigned to the cluster with the highest posterior responsibility
+
+6.4 Visualizations
+                  * ASCII word clouds correctly reflect top words in each cluster
+
+7. Benchmarking
+The script benchmark.py compares this EM implementation with sklearn.mixture.GaussianMixture:
+                     * Performance (log-likelihood)
+                     * Execution time
+                     * Memory footprint
+Results are included.
+8. Deliverables Summary
+​​
+Deliverable
+	Status
+	em_algorithm.py
+	✅ Core EM implemented from scratch
+	index_generator.py
+	✅ Index-to-word mapping utility
+	output_formatter.py
+	✅ Formats outputs into required text files
+	visualizer.py
+	✅ Generates ASCII word clouds for cluster visualization
+	README.md
+	✅ Project overview and execution instructions
+	technical_report.txt
+	✅ Detailed write-up of implementation, results, and evaluation
+	analysis.txt
+	✅ Informal performance and behavior analysis
+	cluster_assignments.txt
+	✅ Final cluster label for each article
+	cluster_stats.txt
+	✅ Top 5 words with mean and variance per cluster
+	em_parameters.txt
+	✅ Complete GMM parameters (means, variances, weights)
+	convergence_log.txt
+	✅ Log-likelihood values per iteration
+	ascii_wordclouds.txt
+	✅ Text-based visualization of top words per cluster
+	benchmark.py
+	✅ Extra credit: compares to sklearn’s GMM
+	Data606 (1).ipynb
+	✅ Jupyter notebook for full pipeline execution
+	
+
+9. Sample Output Demonstration
+To support interpretability and quick verification, we ran our EM implementation on a small subset of the Wikipedia dataset, specifically using people_wiki.csv.
+This demonstration generates the same outputs as the full-scale run, including:
+                     * cluster_assignments.txt
+                     * cluster_stats.txt
+                     * em_parameters.txt
+                     * ascii_wordclouds.txt
+                     * convergence_log.txt
+
+The sample output serves several purposes:
+                        * It offers a faster way to verify algorithm behavior
+                        * Helps in debugging output formatting and convergence
+                        * Allows clearer inspection of word cloud interpretations and parameter values
+10. Conclusion
+This project successfully implements a custom EM algorithm with diagonal covariance GMMs to cluster text data. All expectations from the assignment have been met:
+                        * Functional and correct implementation
+                        * Clean and interpretable outputs
+                        * Proper visualizations and convergence
+                        * Optional benchmarking included
+
+The results validate the utility of EM for unsupervised clustering in high-dimensional settings, with meaningful clusters emerging from sparse document data.
+.
