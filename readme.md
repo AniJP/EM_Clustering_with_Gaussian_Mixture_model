@@ -126,13 +126,6 @@ Make sure the JSON mapping file `4_map_index_to_word.json` is in the working dir
 - Student Name: *Anirudh Jayaprakash* 
 ---
 
-## 📬 Contact
-
-For any questions regarding this project, please reach out to:
-`pramod21@umd.edu` or `ani31399@umd.edu`
-
----
-
 ##  Sample Output Demonstration 
 
 To help understand how the EM algorithm works, we included a small-scale demonstration using a **subset of the Wikipedia dataset** (`people_wiki.csv`). This run produces the same types of output as the full dataset but in a faster, more interpretable way.
