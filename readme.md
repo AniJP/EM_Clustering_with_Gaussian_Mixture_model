@@ -123,11 +123,7 @@ Make sure the JSON mapping file `4_map_index_to_word.json` is in the working dir
 
 ## Authors
 
-- Student Names: *Anirudh Jayaprakash* and *Pramod Kumar*
-- University IDs: *120622342* *121032911*
-- Course: Data 606 – Algorithms for Data Science
-- Submission Date: May 17, 2025
-
+- Student Name: *Anirudh Jayaprakash* 
 ---
 
 ## 📬 Contact
